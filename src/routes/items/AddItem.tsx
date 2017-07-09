@@ -3,6 +3,7 @@ import { Item } from '../../store/itemsStore/models';
 import TextField from 'material-ui/TextField';
 import CircularProgress from 'material-ui/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton';
+import * as _ from 'lodash';
 
 interface AddItemProps {
     item?: Item;
@@ -32,8 +33,9 @@ export default class AddItem extends React.Component<AddItemProps, AddItemState>
             requestAddItem
         } = this.props;
         const text = this.itemTextInput ? this.itemTextInput.getValue() : undefined;
-        if (text) {
+        if (text && this.itemTextInput) {
             requestAddItem({ text, done: false });
+            this.itemTextInput.getInputNode().value = '';
         } else {
             this.setState({ isItemTextEmpty: true });
         }
@@ -54,8 +56,21 @@ export default class AddItem extends React.Component<AddItemProps, AddItemState>
                 label="Submit"
                 primary={true}
                 style={{ margin: 12, marginTop: 30 }}
+                type="sumbit"
             />
         );
+    }
+
+    renderError() {
+        const { item } = this.props;
+        if (item && item.error) {
+            return (
+                <p style={{ color: 'red' }}>
+                    {_.get(item, 'error.response.data.message', 'Please try again')}
+                </p>
+            );
+        }
+        return null;
     }
 
     render() {
@@ -77,6 +92,7 @@ export default class AddItem extends React.Component<AddItemProps, AddItemState>
                 />
                 <br/>
                 {this.renderLoading()}
+                {this.renderError()}
             </form>
         );
     }
