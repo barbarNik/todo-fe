@@ -95,7 +95,7 @@ export default class Login extends React.Component<LoginProps, LoginState> {
     render() {
         return (
             <Paper style={style} zDepth={3}>
-                <p>Some new feature</p>
+                <p>Some great new feature</p>
                 <form onSubmit={this.onSubmit}>
                     <TextField
                         ref={(input) => {
